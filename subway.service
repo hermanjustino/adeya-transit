@@ -1,0 +1,14 @@
+[Unit]
+Description=Subway Transit LED Display
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/home/pi/adeya-transit
+ExecStart=/usr/bin/python3 /home/pi/adeya-transit/main.py
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,5 @@
+nyct-gtfs
+Pillow
+requests
+protobuf==4.21.12
+gtfs-realtime-bindings
