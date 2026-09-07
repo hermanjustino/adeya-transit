@@ -27,21 +27,28 @@ curl -sSL https://raw.githubusercontent.com/adafruit/Raspberry-Pi-Installer-Scri
 
 ### 3. Clone and Setup this Project
 ```bash
-git clone https://github.com/yourusername/adeya-transit.git
+git clone https://github.com/hermanjustino/adeya-transit.git
 cd adeya-transit
 
-# Create and activate a virtual environment (Recommended)
-python3 -m venv venv
-source venv/bin/activate
-
-# Install dependencies
-pip install -r requirements.txt
+# Install dependencies system-wide (NOT in a venv).
+# The rgb-matrix.sh installer above binds the `rgbmatrix` C-extension to
+# system python3. If you instead `pip install` into a venv, main.py's
+# `import rgbmatrix` will fail and it will silently fall back to virtual
+# mode (saving preview.png) instead of driving the real panel.
+pip3 install -r requirements.txt --break-system-packages
 ```
+*(`--break-system-packages` is needed on Raspberry Pi OS Bookworm's
+PEP 668-managed Python; omit it on older Raspberry Pi OS versions.)*
+
+A venv is still fine for developing off-Pi, where there's no `rgbmatrix`
+module to worry about and the app just runs in virtual mode.
 
 ### 4. Configuration
-Edit `config.py` to set your desired station IDs.
+Edit `config.py` to set your desired station IDs. Out of the box it tracks
+the 1/B/C trains, Uptown, at 59 St-Columbus Circle.
 - Find your Stop ID in the [MTA Stop List](https://data.ny.gov/Transportation/MTA-Subway-Stops/u855-bhbe).
-- Example: `L11` is Bedford Av.
+- Stop IDs end in `N` or `S` for direction (e.g. `125N` = Uptown 1 train at 59 St-Columbus Circle).
+- `MTA_API_KEY` can be left as `None` — MTA's realtime feeds no longer require one.
 
 ### 5. Run manually
 ```bash

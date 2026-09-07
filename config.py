@@ -1,6 +1,11 @@
 # Configuration for the Subway LED Display
 
 # Your MTA API Key
+# NOTE: Confirmed unnecessary as of nyct-gtfs 1.3.2 (pinned in requirements.txt)
+# — MTA's GTFS-realtime feeds no longer require a key. NYCTFeed still takes
+# this param, but None is accepted and live-tested (2026-09-06) as returning
+# real-time data for all TRACKED_LINES below. If MTA ever reinstates key
+# enforcement, grab one at https://api.mta.info/ and set it here.
 MTA_API_KEY = None
 
 # Tracked Lines and Stops
@@ -23,5 +28,5 @@ MATRIX_HEIGHT = 32
 # Hardware settings (rpi-rgb-led-matrix)
 MATRIX_ROWS = 32
 MATRIX_COLS = 64
-MATRIX_HARDWARE_MAPPING = 'adafruit-hat'
+MATRIX_HARDWARE_MAPPING = 'adafruit-hat-pwm'  # -pwm suffix: Quality mode + GPIO4/GPIO18 jumper
 GPIO_SLOWDOWN = 2

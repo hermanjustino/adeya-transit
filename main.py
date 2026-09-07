@@ -1,3 +1,4 @@
+import os
 import time
 import sys
 import signal
@@ -9,6 +10,16 @@ try:
     from rgbmatrix import RGBMatrix, RGBMatrixOptions
     HAS_HARDWARE = True
 except ImportError:
+    HAS_HARDWARE = False
+
+# `import rgbmatrix` succeeding only means the bindings are installed — it
+# says nothing about whether a panel/HAT is actually wired up. Once rgbmatrix
+# is installed into the interpreter you're using, HAS_HARDWARE flips True
+# and this will try to drive real GPIO even with nothing connected. Set
+# SUBWAY_FORCE_VIRTUAL=1 to force the preview.png path regardless, e.g. for
+# testing the fetch/render/cache loop before soldering is done:
+#   SUBWAY_FORCE_VIRTUAL=1 ~/env/bin/python3 main.py
+if os.environ.get("SUBWAY_FORCE_VIRTUAL"):
     HAS_HARDWARE = False
 
 class SubwayApp:

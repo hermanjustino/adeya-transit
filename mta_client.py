@@ -49,10 +49,13 @@ class MTAClient:
         return arrivals[:max_results]
 
 if __name__ == "__main__":
-    # Test (Bedford Av Northbound)
-    client = MTAClient()
-    try:
-        results = client.get_next_arrivals("L11N", "L")
-        print(f"Next L trains at Bedford Av (N): {results}")
-    except Exception as e:
-        print(f"Could not fetch data: {e}")
+    # Quick manual smoke test against config.py's actual tracked stops
+    # (59 St-Columbus Circle, Uptown). Run with: python3 mta_client.py
+    import config
+    client = MTAClient(api_key=config.MTA_API_KEY)
+    for item in config.TRACKED_LINES:
+        try:
+            results = client.get_next_arrivals(item["stop_id"], item["line"])
+            print(f"{item['line']} @ {item['stop_id']} ({item['label']}): {results}")
+        except Exception as e:
+            print(f"Could not fetch {item['line']} @ {item['stop_id']}: {e}")

@@ -5,8 +5,13 @@ After=network.target
 [Service]
 Type=simple
 User=root
-WorkingDirectory=/home/pi/adeya-transit
-ExecStart=/usr/bin/python3 /home/pi/adeya-transit/main.py
+WorkingDirectory=/home/herman/adeya-transit
+# NOTE: must be the SAME python3 that has the rgbmatrix bindings — on this
+# Pi that's ~/env (a --system-site-packages venv the rgb-matrix.py installer
+# built), NOT /usr/bin/python3 and NOT the project's own venv/. Install
+# requirements.txt into ~/env too (nyct-gtfs, Pillow) so this interpreter has
+# both the hardware bindings and the app's dependencies in one place.
+ExecStart=/home/herman/env/bin/python3 /home/herman/adeya-transit/main.py
 Restart=always
 RestartSec=10
 
