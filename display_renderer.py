@@ -25,10 +25,27 @@ class DisplayRenderer:
             'G': (110, 199, 69),  # Lime
         }
 
-        try:
-            # Using a built-in font for simplicity, but Truetype is better for circles
-            self.font = ImageFont.load_default()
-        except:
+        # ImageFont.load_default() renders a tiny ~6x10px bitmap glyph that's
+        # thin and hard to read on a 3mm-pitch panel viewed up close. Prefer a
+        # bold TTF at a size tuned for 32px-tall rows; fall back gracefully if
+        # no TTF is available (e.g. a minimal Raspberry Pi OS Lite install
+        # without fonts-dejavu-core).
+        ttf_candidates = [
+            font_path,
+            "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
+            "/usr/share/fonts/truetype/freefont/FreeSansBold.ttf",
+        ]
+        self.font = None
+        for path in ttf_candidates:
+            if path and os.path.exists(path):
+                try:
+                    self.font = ImageFont.truetype(path, 8)
+                    break
+                except Exception:
+                    continue
+        if self.font is None:
+            print("!!! No TTF font found, falling back to tiny built-in bitmap font. "
+                  "Run `sudo apt-get install fonts-dejavu-core` for legible text.")
             self.font = ImageFont.load_default()
 
     def render_multi_lines(self, line_data):

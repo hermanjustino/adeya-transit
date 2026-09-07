@@ -1,4 +1,8 @@
-nyct-gtfs
+# Pinned to the version this app's mta_client.py was written and tested
+# against. nyct-gtfs 2.x changed enough of its API (filter_trips signature,
+# NYCTFeed constructor) that an unpinned `pip install -U` would break
+# get_next_arrivals(). Re-test before bumping.
+nyct-gtfs==1.3.2
 Pillow
 requests
 protobuf==4.21.12
